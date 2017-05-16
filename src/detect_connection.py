@@ -26,7 +26,7 @@ def log(string, path):
         log.write(now)
         log.write(" -- ")
         log.write(string)
-        log.write("\n")
+	log.write("\n")
     if DEBUG:
         print string
 
