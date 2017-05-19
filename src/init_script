@@ -1,12 +1,1 @@
-#!/bin/sh /etc/rc.common
-
-START=1000
-STOP=1015
-
-restart() {
-  echo restart
-  opkg update
-  opkg install python -d ram
-  opkg install vim -d ram
-  opkg install tmux -d ram
-}
+/etc/init.d/init_script
