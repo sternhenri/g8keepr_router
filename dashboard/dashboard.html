@@ -3655,6 +3655,13 @@ body > .navbar-collapse {
                                 <div class="table-full-width">
                                     <table class="table">
                                         <tbody>
+																						<tr>
+																							<th></th>
+																							<th>Name</th>
+																							<th>IP</th>
+																							<th>MAC</th>
+																							<th>Status</th>
+																						</tr>
 																						{% for item in devices %}
 																							<tr>
 																								<td>
@@ -3664,6 +3671,8 @@ body > .navbar-collapse {
 																									</label>
 																								</td>
 																								<td>{{item.name}}</td>
+																								<td>{{item.IP}}</td>
+																								<td>{{item.MAC}}</td>
 																								<td>{{item.status}}</td>
 																								<td class="td-actions text-right">
 																								<button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
