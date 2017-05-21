@@ -52,23 +52,28 @@ def analyzeReconnection(id_):
 
 #### Main Execution ####
 
-# reap arguments
-if len(sys.argv) != 5:
-    cLog("Script called with invalid arguments: %s" % sys.argv)
-    sys.exit('Quitting...')
+def main():
 
-new_conn, mac, ip, name = sys.argv[1:]
-cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
-# load whitelist -- or something
-try:
-    with open(WHITELIST_LOC, 'rb') as whitelistFile:
-        whitelist = pickle.load(whitelistFile)
-except:
-    whitelist = []
+	if len(sys.argv) != 5:
+			cLog("Script called with invalid arguments: %s" % sys.argv)
+			sys.exit('Quitting...')
 
-# fingerprinting will be handy here
-deviceIdentifier = mac
-if new_conn == 'add':
-    analyzeNewDevice(deviceIdentifier)
-elif deviceIdentifier not in whitelist:
-    analyzeReconnection(deviceIdentifier)
+	# reap arguments
+	new_conn, mac, ip, name = sys.argv[1:]
+	cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
+	# load whitelist -- or something
+	try:
+			with open(WHITELIST_LOC, 'rb') as whitelistFile:
+					whitelist = pickle.load(whitelistFile)
+	except:
+			whitelist = []
+
+	# fingerprinting will be handy here
+	deviceIdentifier = mac
+	if new_conn == 'add':
+			analyzeNewDevice(deviceIdentifier)
+	elif deviceIdentifier not in whitelist:
+			analyzeReconnection(deviceIdentifier)
+
+if __name__ == '__main__':
+	main()
