@@ -5,9 +5,7 @@ from jinja2 import Template
 import datetime
 import json
 
-def main():
-	template_file, devices_json, output_file = sys.argv[1:]
-
+def render(template_file, devices_json, output_file):
 	template = Template(io.open(template_file, 'r', encoding="utf-8").read())
 
 	devices = json.load(open(devices_json,'r'))
@@ -19,6 +17,11 @@ def main():
 	
 	with io.open(output_file, 'w', encoding='utf-8') as output:
 		output.write(rendered)
+
+
+def main():
+	template_file, devices_json, output_file = sys.argv[1:]
+	render(template_file, devices_json, output_file)
 
 if __name__ == '__main__':
 	main()
