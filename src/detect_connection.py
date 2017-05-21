@@ -1,5 +1,10 @@
+"""This module handles new connections and is the main entry point for g8keepr"""
 #!/tmp/usr/bin/python
 import os
+import sys
+import pickle
+import fingerprinting
+from time import gmtime, strftime
 os.system("echo 'py' >> /root/g8keepr/log/debug.log")
 """ 2 main options: arp + cron job || dchp.leases + /etc/dnsmasq.conf addition
                                                     |-> dhcp-script=~/g8keepr/src/detect_connection.py
@@ -10,9 +15,6 @@ other options:
     - for selected network interfaces                    : https://wiki.openwrt.org/doc/faq/faq.wireless
 """
 
-import sys
-import pickle
-from time import gmtime, strftime
 
 DEBUG = True
 CUSTOM_LOG = '/root/g8keepr/log/events.log'
@@ -36,6 +38,7 @@ def cLog(string):
 def analyzeNewDevice(id_):
     cLog("New device connected:")
     cLog(id_)
+
     if ("niceDevice" in id_):
         whitelist.append(id_)
         with open(WHITELIST_LOC, 'wb') as whitelistFile:
@@ -54,7 +57,6 @@ if len(sys.argv) != 5:
 
 new_conn, mac, ip, name = sys.argv[1:]
 cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
-
 # load whitelist -- or something
 try:
     with open(WHITELIST_LOC, 'rb') as whitelistFile:
