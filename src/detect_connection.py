@@ -3,6 +3,7 @@
 import os
 import sys
 import pickle
+import ndsutils
 import fingerprinting
 from time import gmtime, strftime
 os.system("echo 'py' >> /root/g8keepr/log/debug.log")
@@ -38,7 +39,8 @@ def cLog(string):
 def analyzeNewDevice(id_):
     cLog("New device connected:")
     cLog(id_)
-
+    clients=ndsutils.get_clients()
+    fingerprinting.fingerprint(id,mac)
     if ("niceDevice" in id_):
         whitelist.append(id_)
         with open(WHITELIST_LOC, 'wb') as whitelistFile:
