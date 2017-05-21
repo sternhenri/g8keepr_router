@@ -1,10 +1,12 @@
-"""This module handles new connections and is the main entry point for g8keepr"""
 #!/tmp/usr/bin/python
+
+"""This module handles new connections and is the main entry point for g8keepr"""
+
 import os
 import sys
 import pickle
 import ndsutils
-import fingerprinting
+from fingerprinting import fingerprint
 from time import gmtime, strftime
 os.system("echo 'py' >> /root/g8keepr/log/debug.log")
 """ 2 main options: arp + cron job || dchp.leases + /etc/dnsmasq.conf addition
@@ -39,8 +41,9 @@ def cLog(string):
 def analyzeNewDevice(id_):
     cLog("New device connected:")
     cLog(id_)
-    clients=ndsutils.get_clients()
-    fingerprinting.fingerprint(id,mac)
+    clients = ndsutils.get_clients()
+    fingerprint(id,mac)
+    
     if ("niceDevice" in id_):
         whitelist.append(id_)
         with open(WHITELIST_LOC, 'wb') as whitelistFile:
@@ -55,25 +58,25 @@ def analyzeReconnection(id_):
 def main():
 
 	if len(sys.argv) != 5:
-			cLog("Script called with invalid arguments: %s" % sys.argv)
-			sys.exit('Quitting...')
+		cLog("Script called with invalid arguments: %s" % sys.argv)
+		sys.exit('Quitting...')
 
 	# reap arguments
 	new_conn, mac, ip, name = sys.argv[1:]
 	cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
 	# load whitelist -- or something
 	try:
-			with open(WHITELIST_LOC, 'rb') as whitelistFile:
-					whitelist = pickle.load(whitelistFile)
+		with open(WHITELIST_LOC, 'rb') as whitelistFile:
+			whitelist = pickle.load(whitelistFile)
 	except:
-			whitelist = []
+		whitelist = []
 
 	# fingerprinting will be handy here
 	deviceIdentifier = mac
 	if new_conn == 'add':
-			analyzeNewDevice(deviceIdentifier)
+		analyzeNewDevice(deviceIdentifier)
 	elif deviceIdentifier not in whitelist:
-			analyzeReconnection(deviceIdentifier)
+		analyzeReconnection(deviceIdentifier)
 
 if __name__ == '__main__':
 	main()
