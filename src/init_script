@@ -1,1 +1,20 @@
-/etc/init.d/init_script
+#!/bin/sh /etc/rc.common
+# Example script
+# Copyright (C) 2007 OpenWrt.org
+ 
+START=10
+STOP=15
+ 
+start() {        
+        echo start
+        # commands to launch application
+	opkg update
+	opkg install python-light -d ram
+	opkg install python-pip -d ram
+	python /tmp/usr/bin/pip install jinja2
+}
+ 
+stop() {          
+        echo stop
+        # commands to kill application 
+}
