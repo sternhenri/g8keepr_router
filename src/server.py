@@ -30,7 +30,8 @@ class G8KeeprHandler(BaseHTTPRequestHandler):
 				self.wfile.write(f.read())
 
 def main():
-	server = HTTPServer(('',8000), G8KeeprHandler)
+	server = HTTPServer(('0.0.0.0',8000), G8KeeprHandler)
+	print 'Server initialized. Serving...'
 	server.serve_forever()
 
 if __name__ == '__main__':
