@@ -52,6 +52,7 @@ if len(sys.argv) != 5:
     cLog("Script called with invalid arguments: %s" % sys.argv)
     sys.exit('Quitting...')
 new_conn, mac, ip, name = sys.argv[1:]
+cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
 
 # load whitelist -- or something
 try:

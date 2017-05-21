@@ -11,7 +11,7 @@ def read_client_status(ndsresponse):
 	for param in CLIENT_PARAMS:
 		client_status[param] = ndsread(ndsresponse)
 	ndsresponse.readline()
-	print client_status
+	client_status
 
 def get_clients():
 	ndsresponse = os.popen('ndsctl clients')
@@ -20,7 +20,7 @@ def get_clients():
 	ndsresponse.readline()
 	
 	for i in xrange(num_clients):
-		read_client_status(ndsresponse)
+		client_status = read_client_status(ndsresponse)
 
 def main():
 	get_clients()
