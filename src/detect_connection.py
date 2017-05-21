@@ -48,7 +48,9 @@ def analyzeReconnection(id_):
 #### Main Execution ####
 
 # reap arguments
-assert len(sys.argv) == 5
+if len(sys.argv) != 5:
+    cLog("Script called with invalid arguments: %s" % sys.argv)
+    sys.exit('Quitting...')
 new_conn, mac, ip, name = sys.argv[1:]
 
 # load whitelist -- or something
