@@ -24,7 +24,7 @@ class G8KeeprHandler(BaseHTTPRequestHandler):
 		self.send_header('Content-type', mimetype)
 		self.end_headers()
 		if mimetype=='text/html':
-			render(template, devices_json, '#', self.wfile)
+			render(template, devices_json, self.wfile)
 		else:
 			with open(base + path, 'rb') as f:
 				self.wfile.write(f.read())
