@@ -1,1 +1,14 @@
-[{"status": "Vulnerable", "name": "Wireless IP Camera"}, {"status": "OK", "name": "Google Nexus 6P"}]
+[
+	{
+		"status": "Vulnerable", 
+		"name": "Wireless IP Camera",
+		"MAC": "00:00:00:00:00:00",
+		"IP": "192.168.1.50"
+	}, 
+	{
+		"status": "OK", 
+		"name": "Google Nexus 6P",
+		"MAC": "00:00:00:00:00:00",
+		"IP": "192.168.1.52"
+	}
+]
