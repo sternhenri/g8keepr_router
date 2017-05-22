@@ -14,7 +14,7 @@ def security_test(devicename, ip, mac):
         cLog ("Testing for the weak accounts and passwords...")
         url = 'http://'+ ip
         r=requests.get(url, auth=HTTPDigestAuth('admin', 'admin'))
-        cLog (r.json.string)
+        cLog (r.content)
         if r.status_code == 200:
             print ("Weak account and password is detected: admin, admin.")
             flag = 1

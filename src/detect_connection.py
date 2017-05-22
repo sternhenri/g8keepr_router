@@ -89,8 +89,8 @@ def main():
         	analyzeNewDevice(mac,ip,name)
         elif mac not in whitelist:
         	analyzeReconnection(mac)
-    except:
-        e = sys.exc_info()[0]
-        cLog(e)
+    except Exception as e:
+        cLog(e.message)
+        raise
 if __name__ == '__main__':
 	main()
