@@ -2,8 +2,7 @@ import sys
 import requests
 import socket
 import nmap
-from detect_connection import *
-
+from log import * 
 
 
 def finger_print(name,ip, mac):
@@ -66,6 +65,6 @@ def finger_print(name,ip, mac):
         return "P2PCamera"
     return "unknown";
 
-#result = finger_print( '','192.168.1.232', '00:8f:bd:ae:a3:ec')
-#print result
+result = finger_print( '','192.168.1.232', '00:8f:bd:ae:a3:ec')
+print result
 

@@ -9,6 +9,7 @@ from time import gmtime, strftime
 import ndsutils
 from finger_print import finger_print
 from security_test import security_test
+from log import *
 os.system("echo 'py' >> /root/g8keepr/log/debug.log")
 """ 2 main options: arp + cron job || dchp.leases + /etc/dnsmasq.conf addition
                                                     |-> dhcp-script=~/g8keepr/src/detect_connection.py
@@ -21,25 +22,14 @@ other options:
 
 
 DEBUG = True
-CUSTOM_LOG = '/root/g8keepr/log/events.log'
+
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
 DEVICES_LOC = '/root/g8keepr/dashboard/devices.json'
 MAIN_CLIENT = '60:c5:47:0d:1f:70'
 SEEN_DEVICES_LOC = 'root/g8keepr/seendevices.pickle'
 ### Methods ####
 
-def log(string, path):
-    with open(path, 'ab') as logfile:
-        now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        logfile.write(now)
-        logfile.write(" -- ")
-        logfile.write(string)
-        logfile.write("\n")
-    if DEBUG:
-        print string
 
-def cLog(string):
-    log(string, CUSTOM_LOG)
 def overwriteStatus(mac,ip,name,status,comment=""):
     with open(DEVICES_LOC,'r+') as device_file:
         devices=json.load(device_file)
