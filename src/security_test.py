@@ -6,9 +6,7 @@ from log import *
 #return values, a tuple of (status,comments)
 def security_test(devicename, ip, mac):
     flag = 0
-
     cLog ("Start the security testing..........................................")
-
     #Web Interface brute force attack
     if devicename == 'P2PCamera':
         cLog ("Testing for the weak accounts and passwords...")
@@ -18,8 +16,6 @@ def security_test(devicename, ip, mac):
         if r.status_code == 200:
             print ("Weak account and password is detected: admin, admin.")
             flag = 1
-
-
     #Telnet brute force attack
     if devicename == 'P2PCamera':
         cLog ("Telnet port 23 is up. This might expose the user's content to attakcers.")
@@ -27,9 +23,5 @@ def security_test(devicename, ip, mac):
 	cLog("***Security test is done. Identify three vulenrabilities.\n 1) Default account and user name. 2) Telnet port is up. 3) Outdated software.")
     if flag == 1:
         return ('vulnerable', 'Identified three vulenrabilities. 1) Default account and user name. 2) Telnet port is up. 3) Outdated software. G8keepr can help you set a secure password and update the software.' )
-    cLog("Security testing completed without finding a vulnerability"
+    cLog("Security testing completed without finding a vulnerability")
     return ('OK','Device looks safe')
-
-
-result = security_test('P2PCamera','192.168.1.232', '00:8f:bd:ae:a3:ec')
-print result
