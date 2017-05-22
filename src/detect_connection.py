@@ -50,7 +50,7 @@ def analyzeNewDevice(mac,ip,name):
     cLog("New device connected:")
     cLog(mac)
     overwriteStatus(mac, ip, name, "Fingerprinting")
-    if "iphone" in name:
+    if "iPhone" in name:
         cLog("iPhone detected")
     else:
         name = finger_print(name, ip, mac)
