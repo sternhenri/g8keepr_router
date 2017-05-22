@@ -24,8 +24,8 @@ def finger_print(name,ip, mac):
 
     r = requests.get('http://'+ ip)
     if r.status_code == 401:
-        cLog (r.text)
         cLog ("Identify the features of the device's web interface.")
+    	cLog ("Web intercace detected.")
     else:
         flag = 0
 
@@ -65,6 +65,4 @@ def finger_print(name,ip, mac):
         return "ICAM-608"
     return "unknown";
 
-result = finger_print( '','192.168.1.232', '00:8f:bd:ae:a3:ec')
-print result
 
