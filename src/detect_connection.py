@@ -37,7 +37,7 @@ def overwriteStatus(mac,ip,name,status,comment=""):
         devices=json.load(device_file)
         found_device=False
         for device in devices:
-            if device["IP"]==ip and device["MAC"]==mac and device["name"]==name:
+            if device["IP"]==ip and device["MAC"]==mac:
                 device["status"]=status
                 device["comment"]=comment
                 found_device=True
@@ -49,9 +49,9 @@ def overwriteStatus(mac,ip,name,status,comment=""):
 def analyzeNewDevice(mac,ip,name):
     cLog("New device connected:")
     cLog(mac)
-    overwriteStatus(mac, ip, name, "FINGERPRINTING")
+    overwriteStatus(mac, ip, name, "Fingerprinting")
     name = finger_print(name, ip, mac)
-    overwriteStatus(mac, ip, name, "TESTING")
+    overwriteStatus(mac, ip, name, "Testing")
     status, comment = security_test(name, ip, mac)
     overwriteStatus(mac, ip, name, status,comment)
     if status <> "OK":
@@ -59,9 +59,10 @@ def analyzeNewDevice(mac,ip,name):
         ndsutils.unauthorize_client(mac)
         cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
-    cLog("Rendering new captive portal")
-    render(TEMPLATE_LOC,DEVICES_LOC,OUTPUT_LOC)
-    cLog("Captive portal successfully rendered")
+    
+	cLog("Rendering new captive portal")
+    	render(TEMPLATE_LOC,DEVICES_LOC,OUTPUT_LOC)
+    	cLog("Captive portal successfully rendered")
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
     cLog(id_)
