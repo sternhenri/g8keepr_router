@@ -59,7 +59,9 @@ def analyzeNewDevice(mac,ip,name):
         ndsutils.unauthorize_client(mac)
         cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
+    cLog("Rendering new captive portal")
     render(TEMPLATE_LOC,DEVICES_LOC,OUTPUT_LOC)
+    cLog("Captive portal successfully rendered")
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
     cLog(id_)
