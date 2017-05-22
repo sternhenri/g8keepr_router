@@ -24,10 +24,10 @@ def security_test(devicename, ip, mac):
     if devicename == 'P2PCamera':
         cLog ("Telnet port 23 is up. This might expose the user's content to attakcers.")
         cLog ("Testing for weak telnet accounts and passwords")
-
-    cLog("***Security test is done. Identify three vulenrabilities.\n 1) Default account and user name. 2) Telnet port is up. 3) Outdated software.")
+	cLog("***Security test is done. Identify three vulenrabilities.\n 1) Default account and user name. 2) Telnet port is up. 3) Outdated software.")
     if flag == 1:
         return ('vulnerable', 'Identified three vulenrabilities. 1) Default account and user name. 2) Telnet port is up. 3) Outdated software. G8keepr can help you set a secure password and update the software.' )
+    cLog("Security testing completed without finding a vulnerability"
     return ('OK','Device looks safe')
 
 
