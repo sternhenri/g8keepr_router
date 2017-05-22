@@ -21,7 +21,6 @@ other options:
 """
 
 
-DEBUG = True
 
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
 DEVICES_LOC = '/root/g8keepr/dashboard/devices.json'
