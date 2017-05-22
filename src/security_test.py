@@ -27,8 +27,8 @@ def security_test(devicename, ip, mac):
     print("***Security test is done. Identify three vulenrabilities.\n 1) Default account and user name. 2) Telnet port is up. 3) Outdated software.")
     if flag == 1:
         return ('vulnerable', 'Identify three vulenrabilities. 1) Default account and user name. 2) Telnet port is up. 3) Outdated software. We can help you to set a secure password and update the software.' )
-    
+    return ('ok','Device looks safe')
 
 
-#result = security_test('P2PCamera','192.168.1.232', '00:8f:bd:ae:a3:ec')        
+#result = security_test('P2PCamera','192.168.1.232', '00:8f:bd:ae:a3:ec')
 #print result
