@@ -63,7 +63,7 @@ def analyzeReconnection(id_):
 
 def main():
 	cLog("G8keepr called with {}".format(sys.argv))
-	if len(sys.argv) < 5:
+	if len(sys.argv) < 4:
 		cLog("Script called with invalid arguments: %s" % sys.argv)
 		sys.exit('Quitting...')
 
