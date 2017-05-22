@@ -68,7 +68,11 @@ def main():
 		sys.exit('Quitting...')
 
 	# reap arguments
-	new_conn, mac, ip, name = sys.argv[1:]
+	new_conn, mac, ip = sys.argv[1:4]
+	name = None
+	if len(sys.argv) == 5:
+		name = sys.arv[4]
+
 	cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
 	# load whitelist -- or something
 	try:
