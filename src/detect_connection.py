@@ -49,7 +49,7 @@ def analyzeNewDevice(mac,ip):
     cLog(mac)
     name=fingerprint(mac,ip,"")
     overwriteStatus(mac,ip,name,"FINGERPRINTING")
-    status=testDevice(ip,mac)
+    status="OK"
     if status<>"OK":
         print "Vulnerable devices at ip/mac {}/{} detected. Shutting down devices and prompting user input".format(ip,mac)
         ndsutils.unauthorize_client(mac)
