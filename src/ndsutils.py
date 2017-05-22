@@ -18,10 +18,8 @@ def get_clients():
 	num_clients = int(ndsresponse.readline())
 	print num_clients
 	ndsresponse.readline()
-
-	for i in xrange(num_clients):
-		client_status = _read_client_status(ndsresponse)
-
+        clients=[_read_client_status(ndsresponse) for i in xrange(num_clients)]
+        return clients
 def unauthorize_client(ip_or_mac):
 	os.sytem('ndsctl deauth ' + ip_or_mac)
 
