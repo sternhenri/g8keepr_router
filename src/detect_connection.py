@@ -40,12 +40,14 @@ def overwriteStatus(mac,ip,name,status,comment=""):
             if device["IP"]==ip and device["MAC"]==mac:
                 device["status"]=status
                 device["comment"]=comment
-                found_device=True
+                device["name"] = name
+		found_device=True
         if not found_device:
             new_device={"IP":ip,"MAC":mac,"name":name,"status":status,"comment":comment}
             devices.append(new_device)
         with open(DEVICES_LOC, 'w') as device_file:
             json.dump(devices,device_file)
+
 def analyzeNewDevice(mac,ip,name):
     cLog("New device connected:")
     cLog(mac)
@@ -58,16 +60,17 @@ def analyzeNewDevice(mac,ip,name):
     status, comment = security_test(name, ip, mac)
     overwriteStatus(mac, ip, name, status,comment)
     if status <> "OK":
-        cLog("Vulnerable devices at ip/mac {}/{} detected. Shutting down devices".format(ip, mac))
-        ndsutils.unauthorize_client(mac)
+        cLog("Vulnerable devices at ip/mac {}/{} detected. Device is quarantained.".format(ip, mac))
+        ndsutils.unauthorize_client(ip)
         cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
-        cLog("Rendering new captive portal")
+        cLog("Generating report")
     	render(TEMPLATE_LOC,DEVICES_LOC,OUTPUT_LOC)
-    	cLog("Captive portal successfully rendered")
+    	cLog("Report successfully generated")
     else:
         cLog("Safe device called {} with mac address {} found. Granting access to the network.".format(name,mac))
-        ndsutils.authorize_client(mac)
+        ndsutils.authorize_client(ip)
+
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
     cLog(id_)
