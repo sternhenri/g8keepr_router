@@ -23,7 +23,7 @@ other options:
 DEBUG = True
 CUSTOM_LOG = '/root/g8keepr/log/events.log'
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
-DEVICES_LOC = 'root/g8keepr/devices.json'
+DEVICES_LOC = '/root/g8keepr/dashboard/devices.json'
 MAIN_CLIENT = '60:c5:47:0d:1f:70'
 SEEN_DEVICES_LOC = 'root/g8keepr/seendevices.pickle'
 ### Methods ####
@@ -41,7 +41,7 @@ def log(string, path):
 def cLog(string):
     log(string, CUSTOM_LOG)
 def overwriteStatus(mac,ip,name,status,comment=""):
-    with open(DEVICES_LOC,'wb') as device_file:
+    with open(DEVICES_LOC,'r+') as device_file:
         devices=json.load(device_file)
         found_device=False
         for device in devices:
