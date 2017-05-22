@@ -23,6 +23,7 @@ DEBUG = True
 CUSTOM_LOG = '/root/g8keepr/log/events.log'
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
 DEVICES_LOC= 'root/g8keepr/devices.json'
+MAIN_CLIENT= '60:c5:47:0d:1f:70'
 ### Methods ####
 
 def log(string, path):
@@ -43,16 +44,16 @@ def overwriteStatus(mac,ip,name,status,comment=""):
         for device in devices:
             if device["IP"]==ip and device["MAC"]==mac and device["name"]==name:
                 device["status"]=status
-def analyzeNewDevice(new_conn,mac,ip,name):
+def analyzeNewDevice(mac,ip):
     cLog("New device connected:")
     cLog(mac)
+    name=fingerprint(mac,ip,"")
     overwriteStatus(mac,ip,name,"FINGERPRINTING")
-    status=fingerprint(mac,ip,name)
-    overwriteStatus(mac,ip,name,status)
+    status=testDevice(ip,mac)
     if status<>"OK":
-
-    clients= ndsutils.get_clients()
-    ndsutils.unauthorize_
+        print "Vulnerable devices at ip/mac {}/{} detected. Shutting down devices and prompting user input".format(ip,mac)
+        ndsutils.unauthorize_client(mac)
+        ndsutils.unauthorize_client(MAIN_CLIENT)
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
     cLog(id_)
@@ -61,7 +62,7 @@ def analyzeReconnection(id_):
 
 def main():
 
-	if len(sys.argv) >= 4:
+	if len(sys.argv) < 4:
 		cLog("Script called with invalid arguments: %s" % sys.argv)
 		sys.exit('Quitting...')
 
