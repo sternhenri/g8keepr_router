@@ -13,4 +13,3 @@
 		"IP": "192.168.1.52"
 	}
 ]
-[{"status": "Vulnerable", "IP": "192.168.1.50", "MAC": "00:00:00:00:00:00", "info": "Default manufacturer password is used", "name": "Wireless IP Camera"}, {"status": "OK", "IP": "192.168.1.52", "MAC": "00:00:00:00:00:00", "name": "Google Nexus 6P"}, {"status": "FINGERPRINTING", "IP": "0", "MAC": "0", "name": "0", "comment": ""}]
