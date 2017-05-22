@@ -1,7 +1,7 @@
 #!/tmp/usr/bin/python
 
 """This module handles new connections and is the main entry point for g8keepr"""
-
+import json
 import os
 import sys
 import pickle
@@ -22,7 +22,7 @@ other options:
 DEBUG = True
 CUSTOM_LOG = '/root/g8keepr/log/events.log'
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
-
+DEVICES_LOC= 'root/g8keepr/devices.json'
 ### Methods ####
 
 def log(string, path):
@@ -37,18 +37,22 @@ def log(string, path):
 
 def cLog(string):
     log(string, CUSTOM_LOG)
-
-def analyzeNewDevice(id_):
+def overwriteStatus(mac,ip,name,status,comment=""):
+    with open(DEVICES_LOC,'wb') as device_file:
+        devices=json.load(device_file)
+        for device in devices:
+            if device["IP"]==ip and device["MAC"]==mac and device["name"]==name:
+                device["status"]=status
+def analyzeNewDevice(new_conn,mac,ip,name):
     cLog("New device connected:")
-    cLog(id_)
-    clients = ndsutils.get_clients()
-    fingerprint(id,mac)
-    
-    if ("niceDevice" in id_):
-        whitelist.append(id_)
-        with open(WHITELIST_LOC, 'wb') as whitelistFile:
-            pickle.dump(whitelist, whitelistFile)
+    cLog(mac)
+    overwriteStatus(mac,ip,name,"FINGERPRINTING")
+    status=fingerprint(mac,ip,name)
+    overwriteStatus(mac,ip,name,status)
+    if status<>"OK":
 
+    clients= ndsutils.get_clients()
+    ndsutils.unauthorize_
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
     cLog(id_)
@@ -57,7 +61,7 @@ def analyzeReconnection(id_):
 
 def main():
 
-	if len(sys.argv) != 5:
+	if len(sys.argv) >= 4:
 		cLog("Script called with invalid arguments: %s" % sys.argv)
 		sys.exit('Quitting...')
 
