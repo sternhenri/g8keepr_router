@@ -11,7 +11,7 @@ def render(template_file, devices_json, output):
 	devices = json.load(open(devices_json,'r'))
 	# print devices
 
-	stream = template.stream(devices=devices, 
+	stream = template.stream(devices=devices,
 													 updatetime=datetime.datetime.now().ctime(),
 													 notifications_count=0,
 													 authtarget='#')

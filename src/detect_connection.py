@@ -10,6 +10,7 @@ import ndsutils
 from finger_print import finger_print
 from security_test import security_test
 from log import *
+from render import render
 os.system("echo 'py' >> /root/g8keepr/log/debug.log")
 """ 2 main options: arp + cron job || dchp.leases + /etc/dnsmasq.conf addition
                                                     |-> dhcp-script=~/g8keepr/src/detect_connection.py
@@ -23,6 +24,8 @@ other options:
 
 
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
+TEMPLATE_LOC = '/root/g8keepr/dashboard/dashboard.html'
+OUTPUT_LOC = '/root/g8keepr/dashboard/captive.html'
 DEVICES_LOC = '/root/g8keepr/dashboard/devices.json'
 MAIN_CLIENT = '60:c5:47:0d:1f:70'
 SEEN_DEVICES_LOC = 'root/g8keepr/seendevices.pickle'
@@ -56,6 +59,9 @@ def analyzeNewDevice(mac,ip,name):
         ndsutils.unauthorize_client(mac)
         cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
+    cLog("Rendering new captive portal")
+    render(TEMPLATE_LOC,DEVICES_LOC,OUTPUT_LOC)
+    cLog("Captive portal successfully rendered")
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
     cLog(id_)
