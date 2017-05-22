@@ -2,7 +2,7 @@ import sys
 import requests
 import socket
 import nmap
-from log import * 
+from log import *
 
 
 def finger_print(name,ip, mac):
@@ -51,7 +51,7 @@ def finger_print(name,ip, mac):
             upPorts.append(targetPort)
     except Exception, e:
         cLog ('[-] Something bad happened during the scan: ' + str(e))
-      
+
     # whether it uses digist authetication
     cLog ("Finger printing the authetication ...")
     if upPorts == [80, 23] :
