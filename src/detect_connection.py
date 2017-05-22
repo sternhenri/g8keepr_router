@@ -49,10 +49,11 @@ def analyzeNewDevice(mac,ip):
     cLog(mac)
     name=fingerprint(mac,ip,"")
     overwriteStatus(mac,ip,name,"FINGERPRINTING")
-    status="OK"
+    status="Vulnerable"
     if status<>"OK":
-        print "Vulnerable devices at ip/mac {}/{} detected. Shutting down devices and prompting user input".format(ip,mac)
+        cLog("Vulnerable devices at ip/mac {}/{} detected. Shutting down devices".format(ip,mac))
         ndsutils.unauthorize_client(mac)
+	cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
@@ -61,8 +62,8 @@ def analyzeReconnection(id_):
 #### Main Execution ####
 
 def main():
-
-	if len(sys.argv) < 4:
+	cLog("G8keepr called with {}".format(sys.argv))
+	if len(sys.argv) < 5:
 		cLog("Script called with invalid arguments: %s" % sys.argv)
 		sys.exit('Quitting...')
 
