@@ -3661,6 +3661,7 @@ body > .navbar-collapse {
 																							<th>IP</th>
 																							<th>MAC</th>
 																							<th>Status</th>
+																							<th>Comment</th>
 																						</tr>
 																						{% for item in devices %}
 																							<tr>
@@ -3674,6 +3675,7 @@ body > .navbar-collapse {
 																								<td>{{item.IP}}</td>
 																								<td>{{item.MAC}}</td>
 																								<td>{{item.status}}</td>
+																								<td>{{item.comment}}</td>
 																								<td class="td-actions text-right">
 																								<button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
 																									<i class="fa fa-edit"></i>
