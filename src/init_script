@@ -5,16 +5,19 @@
 START=10
 STOP=15
  
-start() {        
-        echo start
-        # commands to launch application
+start() {
+	echo start
+  # commands to launch application
 	opkg update
 	opkg install python-light -d ram
 	opkg install python-pip -d ram
 	python /tmp/usr/bin/pip install jinja2
+	cd /root/g8keepr
+	git pull
+	git merge
 }
  
 stop() {          
-        echo stop
-        # commands to kill application 
+	echo stop
+  # commands to kill application 
 }
