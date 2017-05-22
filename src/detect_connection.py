@@ -86,7 +86,7 @@ def main():
 
         # fingerprinting will be handy here
         #For testing you can simply make condition true
-        if new_conn == 'add':
+        if new_conn == 'add' or new_conn == 'old':
         	analyzeNewDevice(mac,ip,name)
         elif mac not in whitelist:
         	analyzeReconnection(mac)
