@@ -5,9 +5,10 @@ import json
 import os
 import sys
 import pickle
-import ndsutils
-from fingerprinting import fingerprint
 from time import gmtime, strftime
+import ndsutils
+from finger_print import finger_print
+from security_test import security_test
 os.system("echo 'py' >> /root/g8keepr/log/debug.log")
 """ 2 main options: arp + cron job || dchp.leases + /etc/dnsmasq.conf addition
                                                     |-> dhcp-script=~/g8keepr/src/detect_connection.py
@@ -22,17 +23,18 @@ other options:
 DEBUG = True
 CUSTOM_LOG = '/root/g8keepr/log/events.log'
 WHITELIST_LOC = '/root/g8keepr/lists/whitelist.pickle'
-DEVICES_LOC= 'root/g8keepr/devices.json'
-MAIN_CLIENT= '60:c5:47:0d:1f:70'
+DEVICES_LOC = 'root/g8keepr/devices.json'
+MAIN_CLIENT = '60:c5:47:0d:1f:70'
+SEEN_DEVICES_LOC = 'root/g8keepr/seendevices.pickle'
 ### Methods ####
 
 def log(string, path):
-    with open(path, 'ab') as log:
+    with open(path, 'ab') as logfile:
         now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        log.write(now)
-        log.write(" -- ")
-        log.write(string)
-	log.write("\n")
+        logfile.write(now)
+        logfile.write(" -- ")
+        logfile.write(string)
+        logfile.write("\n")
     if DEBUG:
         print string
 
@@ -41,19 +43,28 @@ def cLog(string):
 def overwriteStatus(mac,ip,name,status,comment=""):
     with open(DEVICES_LOC,'wb') as device_file:
         devices=json.load(device_file)
+        found_device=False
         for device in devices:
             if device["IP"]==ip and device["MAC"]==mac and device["name"]==name:
                 device["status"]=status
-def analyzeNewDevice(mac,ip):
+                device["comment"]=comment
+                found_device=True
+        if not found_device:
+            new_device={"IP":ip,"MAC":mac,"name":name,"status":status,"comment":comment}
+            devices.append(new_device)
+            json.dump(devices,device_file)
+def analyzeNewDevice(mac,ip,name):
     cLog("New device connected:")
     cLog(mac)
-    name=fingerprint(mac,ip,"")
-    overwriteStatus(mac,ip,name,"FINGERPRINTING")
-    status="Vulnerable"
-    if status<>"OK":
-        cLog("Vulnerable devices at ip/mac {}/{} detected. Shutting down devices".format(ip,mac))
+    overwriteStatus(mac, ip, name, "FINGERPRINTING")
+    name = finger_print(ip, mac)
+    overwriteStatus(mac, ip, name, "TESTING")
+    status, comment = security_test(name, ip, mac)
+    overwriteStatus(mac, ip, name, status,comment)
+    if status <> "OK":
+        cLog("Vulnerable devices at ip/mac {}/{} detected. Shutting down devices".format(ip, mac))
         ndsutils.unauthorize_client(mac)
-	cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
+        cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
 def analyzeReconnection(id_):
     cLog("Reconnection from untrusted device:")
@@ -62,31 +73,32 @@ def analyzeReconnection(id_):
 #### Main Execution ####
 
 def main():
-	cLog("G8keepr called with {}".format(sys.argv))
-	if len(sys.argv) < 4:
-		cLog("Script called with invalid arguments: %s" % sys.argv)
-		sys.exit('Quitting...')
+    cLog("G8keepr called with {}".format(sys.argv))
+    if len(sys.argv) < 4:
+        cLog("Script called with invalid arguments: %s" % sys.argv)
+   	sys.exit('Quitting...')
 
 	# reap arguments
-	new_conn, mac, ip = sys.argv[1:4]
-	name = None
-	if len(sys.argv) == 5:
-		name = sys.arv[4]
+    new_conn, mac, ip = sys.argv[1:4]
+    name = None
+    if len(sys.argv) == 5:
+        name = sys.argv[4]
+    else:
+        name=""
+    cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
+    # load whitelist -- or something
+    try:
+    	with open(WHITELIST_LOC, 'rb') as whitelistFile:
+    		whitelist = pickle.load(whitelistFile)
+    except:
+    	whitelist = []
 
-	cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
-	# load whitelist -- or something
-	try:
-		with open(WHITELIST_LOC, 'rb') as whitelistFile:
-			whitelist = pickle.load(whitelistFile)
-	except:
-		whitelist = []
-
-	# fingerprinting will be handy here
-	deviceIdentifier = mac
-	if new_conn == 'add':
-		analyzeNewDevice(deviceIdentifier)
-	elif deviceIdentifier not in whitelist:
-		analyzeReconnection(deviceIdentifier)
+    # fingerprinting will be handy here
+    #For testing you can simply make condition true
+    if new_conn == 'add':
+    	analyzeNewDevice(mac,ip,name)
+    elif deviceIdentifier not in whitelist:
+    	analyzeReconnection(mac)
 
 if __name__ == '__main__':
 	main()
