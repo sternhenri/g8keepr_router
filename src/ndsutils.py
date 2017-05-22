@@ -16,7 +16,7 @@ def _read_client_status(ndsresponse):
 def get_clients():
 	ndsresponse = os.popen('ndsctl clients')
 	num_clients = int(ndsresponse.readline())
-	print num_clients
+        print "{} clients currently connected to router".format(num_clients)
 	ndsresponse.readline()
         clients=[_read_client_status(ndsresponse) for i in xrange(num_clients)]
         return clients
