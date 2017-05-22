@@ -31,7 +31,7 @@ SEEN_DEVICES_LOC = 'root/g8keepr/seendevices.pickle'
 
 
 def overwriteStatus(mac,ip,name,status,comment=""):
-    with open(DEVICES_LOC,'r+') as device_file:
+    with open(DEVICES_LOC,'r') as device_file:
         devices=json.load(device_file)
         found_device=False
         for device in devices:
@@ -42,12 +42,13 @@ def overwriteStatus(mac,ip,name,status,comment=""):
         if not found_device:
             new_device={"IP":ip,"MAC":mac,"name":name,"status":status,"comment":comment}
             devices.append(new_device)
+        with open(DEVICES_LOC, 'w') as device_file:
             json.dump(devices,device_file)
 def analyzeNewDevice(mac,ip,name):
     cLog("New device connected:")
     cLog(mac)
     overwriteStatus(mac, ip, name, "FINGERPRINTING")
-    name = finger_print(ip, mac)
+    name = finger_print(name, ip, mac)
     overwriteStatus(mac, ip, name, "TESTING")
     status, comment = security_test(name, ip, mac)
     overwriteStatus(mac, ip, name, status,comment)
@@ -67,28 +68,30 @@ def main():
     if len(sys.argv) < 4:
         cLog("Script called with invalid arguments: %s" % sys.argv)
    	sys.exit('Quitting...')
-
-	# reap arguments
-    new_conn, mac, ip = sys.argv[1:4]
-    name = None
-    if len(sys.argv) == 5:
-        name = sys.argv[4]
-    else:
-        name=""
-    cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
-    # load whitelist -- or something
     try:
-    	with open(WHITELIST_LOC, 'rb') as whitelistFile:
-    		whitelist = pickle.load(whitelistFile)
+	# reap arguments
+        new_conn, mac, ip = sys.argv[1:4]
+        name = None
+        if len(sys.argv) == 5:
+            name = sys.argv[4]
+        else:
+            name=""
+        cLog("New connection: %s, %s, %s, %s" % (new_conn, mac, ip, name))
+        # load whitelist -- or something
+        try:
+        	with open(WHITELIST_LOC, 'rb') as whitelistFile:
+        		whitelist = pickle.load(whitelistFile)
+        except:
+        	whitelist = []
+
+        # fingerprinting will be handy here
+        #For testing you can simply make condition true
+        if new_conn == 'add':
+        	analyzeNewDevice(mac,ip,name)
+        elif mac not in whitelist:
+        	analyzeReconnection(mac)
     except:
-    	whitelist = []
-
-    # fingerprinting will be handy here
-    #For testing you can simply make condition true
-    if new_conn == 'add':
-    	analyzeNewDevice(mac,ip,name)
-    elif deviceIdentifier not in whitelist:
-    	analyzeReconnection(mac)
-
+        e = sys.exc_info()[0]
+        cLog(e)
 if __name__ == '__main__':
 	main()
