@@ -7,7 +7,7 @@ import sys
 import pickle
 from time import gmtime, strftime
 import ndsutils
-from finger_print import finger_print
+from fingerprinting import fingerprint
 from security_test import security_test
 from log import *
 from render import render
@@ -55,16 +55,16 @@ def analyzeNewDevice(mac,ip,name):
     if "iPhone" in name:
         cLog("iPhone detected")
     else:
-        name = finger_print(name, ip, mac)
+        name = fingerprint(name, ip, mac)
     overwriteStatus(mac, ip, name, "Testing")
     status, comment = security_test(name, ip, mac)
     overwriteStatus(mac, ip, name, status,comment)
     if status <> "OK":
         cLog("Vulnerable devices at ip/mac {}/{} detected. Device is quarantained.".format(ip, mac))
         ndsutils.unauthorize_client(ip)
-        cLog("Prompting user input from client {} about handeling vulnerable device".format(MAIN_CLIENT))
+        cLog("Prompting user input from client {} about handling vulnerable device".format(MAIN_CLIENT))
         ndsutils.unauthorize_client(MAIN_CLIENT)
-        cLog("Generating report")
+        cLog("Generating report...")
     	render(TEMPLATE_LOC,DEVICES_LOC,OUTPUT_LOC)
     	cLog("Report successfully generated")
     else:

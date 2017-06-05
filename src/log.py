@@ -1,6 +1,8 @@
 from time import gmtime, strftime
+
 CUSTOM_LOG = '/root/g8keepr/log/events.log'
 DEBUG = True
+
 def log(string, path):
     with open(path, 'ab') as logfile:
         now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
