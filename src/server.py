@@ -18,7 +18,7 @@ class G8KeeprHandler(BaseHTTPRequestHandler):
 			mimetype = 'image/jpg'
 		elif self.path.endswith('.gif'):
 			mimetype = 'image/gif'
-		elif self.path.find('/fonts/') != -1:
+		elif '/fonts/' in self.path:
 			mimetype = 'application/font-woff'
 
 		self.send_header('Content-type', mimetype)
