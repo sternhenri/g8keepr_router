@@ -63,4 +63,4 @@ def fingerprint(name,ip, mac):
     # return the device name
     if flag == 1:
         cLog ("Device identified! IP: " + str(ip) + ", MAC: " + str(mac) + " is made by " + manufacturer)
-    return manufacturer;
+    return manufacturer
