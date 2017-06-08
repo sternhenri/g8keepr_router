@@ -5,6 +5,7 @@ import json
 import os
 import sys
 import pickle
+import oui3
 from time import gmtime, strftime
 import ndsutils
 from fingerprinting import fingerprint
@@ -32,18 +33,19 @@ SEEN_DEVICES_LOC = 'root/g8keepr/seendevices.pickle'
 ### Methods ####
 
 
-def overwriteStatus(mac,ip,name,status,comment=""):
+def overwriteStatus(mac,ip,name,status,manufacturer="",comment=""):
     with open(DEVICES_LOC,'r') as device_file:
         devices=json.load(device_file)
         found_device=False
         for device in devices:
-            if device["IP"]==ip and device["MAC"]==mac:
-                device["status"]=status
-                device["comment"]=comment
+            if device["IP"] == ip and device["MAC"] == mac:
+                device["status"] = status
+                device["comment"] = comment
                 device["name"] = name
+                device["manufacturer"] = manufacturer
 		found_device=True
         if not found_device:
-            new_device={"IP":ip,"MAC":mac,"name":name,"status":status,"comment":comment}
+            new_device={"IP":ip,"MAC":mac,"name":name,"manufacturer":manufacturer,"status":status,"comment":comment}
             devices.append(new_device)
         with open(DEVICES_LOC, 'w') as device_file:
             json.dump(devices,device_file)
@@ -56,9 +58,10 @@ def analyzeNewDevice(mac,ip,name):
         cLog("iPhone detected")
     else:
         name = fingerprint(name, ip, mac)
-    overwriteStatus(mac, ip, name, "Testing")
+    manufacturer = oui3.get_manufacturer(mac)
+    overwriteStatus(mac, ip, name, "Testing", manufacturer)
     status, comment = security_test(name, ip, mac)
-    overwriteStatus(mac, ip, name, status,comment)
+    overwriteStatus(mac, ip, name, status, manufacturer, comment)
     if status <> "OK":
         cLog("Vulnerable devices at ip/mac {}/{} detected. Device is quarantained.".format(ip, mac))
         ndsutils.unauthorize_client(ip)
