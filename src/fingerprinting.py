@@ -2,6 +2,7 @@ import sys
 import requests
 import socket
 import nmap
+import oui3
 from log import *
 
 
@@ -32,10 +33,11 @@ def fingerprint(name,ip, mac):
     # match the mac address
 
     print ("Fingerprinting by MAC address...")
-    if mac == '00:8f:bd:ae:a3:ec':
-        cLog ("MAC address prefix matches a known vendor.")
-    else:
+    manufacturer = oui3.get_manufacturer(mac)
+    if manufacturer == oui3.UNKNOWN_MAN:
         flag = 0
+    else:
+        cLog ("MAC address prefix matches a known vendor.")
 
     cLog ("Scanning for open ports...")
 
@@ -51,8 +53,8 @@ def fingerprint(name,ip, mac):
     except Exception, e:
         cLog ('[-] Something bad happened during the scan: ' + str(e))
 
-    # whether it uses digist authetication
-    cLog ("Fingerprinting the authetication ...")
+    # whether it uses digist authentication
+    cLog ("Fingerprinting the authentication ...")
     if upPorts == [80, 23] :
         cLog ('Open ports:' + str(upPorts))
     else:
@@ -60,6 +62,5 @@ def fingerprint(name,ip, mac):
 
     # return the device name
     if flag == 1:
-        cLog ("Device identified! IP: " + str(ip) + ", MAC: " + str(mac) + " is ICAM-608")
-        return "ICAM-608"
-    return "unknown";
+        cLog ("Device identified! IP: " + str(ip) + ", MAC: " + str(mac) + " is made by " + manufacturer)
+    return manufacturer;
