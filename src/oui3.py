@@ -8,7 +8,6 @@ Auto-refreshes once a month.
 Run with -u to force update.
 """
  
- 
 from urllib2 import urlopen
 from getpass import getuser
 import codecs
