@@ -25,7 +25,7 @@ def fingerprint(name,ip, mac):
     r = requests.get('http://'+ ip)
     if r.status_code == 401:
         cLog ("Identify the features of the device's web interface.")
-    	cLog ("Web intercace detected.")
+        cLog ("Web intercace detected.")
     else:
         flag = 0
 
